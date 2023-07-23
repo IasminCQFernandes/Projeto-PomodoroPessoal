@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css\style.css">
+    <title>Pomodoro</title>
+
+    <link rel="shortcut icon" href="src/icon.png" type="image/pnj">
+</head>
+<body>
+    <div class="timer">
+        <div class="time" id="display"></div>
+        
+        <button onclick="startStudy()">Estudar</button>
+        <button onclick="startRest()">Descansar</button>
+      </div>
+    <footer>
+        <div class="home">
+            <img src="src/home-preto.png" alt="home">
+        </div>
+        <div class="calendario">
+            <img src="src/calendario-vazado.png" alt="calendario">
+        </div>
+        <div class="login">
+            <img src="src/usuario-vazado.png" alt="usuario">
+        </div>
+    </footer>
+    <script>
+        let timer;
+let minutes;
+let seconds;
+let isStudyMode = true;
+
+function startStudy() {
+  isStudyMode = true;
+
+  document.querySelector("body").style.backgroundImage = 'url("src/backgroundEstudo.gif")';
+
+  startTimer(25, 0);
+}
+
+function startRest() {
+  isStudyMode = false;
+  
+  document.querySelector("body").style.backgroundImage = 'url("src/backgroundPause.gif")';
+
+  startTimer(5, 0);
+}
+
+function startTimer(minutes, seconds) {
+   
+  clearInterval(timer);
+  let targetTime = new Date();
+  targetTime.setMinutes(targetTime.getMinutes() + minutes);
+  targetTime.setSeconds(targetTime.getSeconds() + seconds);
+
+  timer = setInterval(function() {
+    let currentTime = new Date().getTime();
+    let timeLeft = targetTime - currentTime;
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      document.getElementById("display").innerText = "00:00";
+      if (isStudyMode) {
+        alert("Descanse!");
+      } else {
+        alert("Estude!");
+      }
+    } else {
+      updateDisplay(timeLeft);
+    }
+  }, 1000);
+}
+
+function updateDisplay(timeLeft) {
+  minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+  seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+  document.getElementById("display").innerText =
+    (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+}
+
+    </script>
+</body>
+</html>

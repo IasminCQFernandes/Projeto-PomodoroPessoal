@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cronômetro de 25 minutos</title>
+</head>
+<body>
+  <h1 id="cronometro">25:00</h1>
+  <button onclick="iniciarCronometro()">Iniciar</button>
+  <button onclick="pararCronometro()">Parar</button>
+  <button onclick="zerarCronometro()">Zerar</button>
+
+  <script>
+    let tempoRestante = 25 * 60; // Tempo em segundos (25 minutos)
+
+    function atualizarCronometro() {
+      const minutos = Math.floor(tempoRestante / 60);
+      const segundos = tempoRestante % 60;
+
+      const minutosFormatados = minutos < 10 ? `0${minutos}` : minutos;
+      const segundosFormatados = segundos < 10 ? `0${segundos}` : segundos;
+
+      document.getElementById("cronometro").innerText = `${minutosFormatados}:${segundosFormatados}`;
+    }
+
+    let intervalo;
+
+    function iniciarCronometro() {
+      clearInterval(intervalo);
+      intervalo = setInterval(() => {
+        if (tempoRestante > 0) {
+          tempoRestante--;
+          atualizarCronometro();
+        } else {
+          clearInterval(intervalo);
+          alert("Tempo esgotado!");
+        }
+      }, 1000);
+    }
+
+    function pararCronometro() {
+      clearInterval(intervalo);
+    }
+
+    function zerarCronometro() {
+      clearInterval(intervalo);
+      tempoRestante = 25 * 60;
+      atualizarCronometro();
+    }
+
+    // Para iniciar automaticamente o cronômetro ao carregar a página
+    window.onload = () => {
+      atualizarCronometro();
+    };
+  </script>
+</body>
+</html>
